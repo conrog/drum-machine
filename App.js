@@ -5,12 +5,12 @@ const drums = [
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/47[kb]BRUSH_SLAP_5.wav.mp3",
   },
   {
-    name: "hi-hat closed",
+    name: "hiHatClosed",
     hotkey: "W",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/27[kb]HH%20ACOUSTIC_CLOSED_OUTER.wav.mp3",
   },
   {
-    name: "hi-hat open",
+    name: "hiHatOpen",
     hotkey: "E",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/159[kb]HH%20ACOUSTIC_OPEN_OUTER.wav.mp3",
   },
@@ -20,12 +20,12 @@ const drums = [
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20CR-8000/15[kb]8000bd-14.wav.mp3",
   },
   {
-    name: "splash 1",
+    name: "splash1",
     hotkey: "S",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/62[kb]SPLASH%20TD_1.wav.mp3",
   },
   {
-    name: "splash 2",
+    name: "splash2",
     hotkey: "D",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/62[kb]SPLASH%20TD_2.wav.mp3",
   },
@@ -50,7 +50,7 @@ const DrumPad = (props) => {
   return props.drums.map((drum, index) => (
     <div key={`drum-${index}`}>
       <h2>{drum.name}</h2>
-      <audio controls>
+      <audio id={drum.name}>
         <source src={drum.src} type="audio/mpeg"></source>
       </audio>
     </div>
@@ -61,6 +61,20 @@ const DrumPad = (props) => {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.playDrum = this.playDrum.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    document.addEventListener("keydown", this.handleKeyPress);
+  }
+  playDrum({ name }) {
+    document.getElementById(name).currentTime = 0;
+    document.getElementById(name).play();
+  }
+  handleKeyPress(event) {
+    drums.map((drum) => {
+      if (drum.hotkey === event.key.toUpperCase()) {
+        this.playDrum(drum);
+      }
+    });
   }
   render() {
     return (
