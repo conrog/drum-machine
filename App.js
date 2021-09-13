@@ -46,41 +46,48 @@ const drums = [
   },
 ];
 
-const DrumPad = (props) => {
-  return props.drums.map((drum, index) => (
-    <div key={`drum-${index}`}>
-      <h2>{drum.name}</h2>
-      <audio id={drum.name}>
-        <source src={drum.src} type="audio/mpeg"></source>
-      </audio>
-    </div>
-  ));
-};
-
-//App holds state for volume of drum machine
-class App extends React.Component {
+class DrumPad extends React.Component {
   constructor(props) {
     super(props);
     this.playDrum = this.playDrum.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     document.addEventListener("keydown", this.handleKeyPress);
   }
-  playDrum({ name }) {
-    document.getElementById(name).currentTime = 0;
-    document.getElementById(name).play();
+  playDrum() {
+    let drum = document.getElementById(this.props.drum.name);
+    drum.currentTime = 0;
+    drum.play();
   }
   handleKeyPress(event) {
-    drums.map((drum) => {
-      if (drum.hotkey === event.key.toUpperCase()) {
-        this.playDrum(drum);
-      }
-    });
+    if (this.props.drum.hotkey === event.key.toUpperCase()) {
+      this.playDrum(this.props.drum.name);
+    }
+  }
+  render() {
+    return (
+      <div onClick={this.playDrum}>
+        <h2>{this.props.drum.name}</h2>
+        <audio id={this.props.drum.name}>
+          <source src={this.props.drum.src} type="audio/mpeg"></source>
+        </audio>
+        {this.props.drum.hotkey}
+      </div>
+    );
+  }
+}
+
+//App holds state for volume of drum machine
+class App extends React.Component {
+  constructor(props) {
+    super(props);
   }
   render() {
     return (
       <div>
         <h1>Drum Machine React App</h1>
-        <DrumPad drums={drums} />
+        {drums.map((drum) => {
+          return <DrumPad key={drum.name} drum={drum} />;
+        })}
       </div>
     );
   }
