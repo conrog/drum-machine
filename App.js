@@ -5,12 +5,12 @@ const drums = [
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/47[kb]BRUSH_SLAP_5.wav.mp3",
   },
   {
-    name: "hiHatClosed",
+    name: "hi-hat-closed",
     hotkey: "W",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/27[kb]HH%20ACOUSTIC_CLOSED_OUTER.wav.mp3",
   },
   {
-    name: "hiHatOpen",
+    name: "hi-hat-open",
     hotkey: "E",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/159[kb]HH%20ACOUSTIC_OPEN_OUTER.wav.mp3",
   },
@@ -20,12 +20,12 @@ const drums = [
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20CR-8000/15[kb]8000bd-14.wav.mp3",
   },
   {
-    name: "splash1",
+    name: "splash-1",
     hotkey: "S",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/62[kb]SPLASH%20TD_1.wav.mp3",
   },
   {
-    name: "splash2",
+    name: "splash-2",
     hotkey: "D",
     src: "https://sampleswap.org/samples-ghost/DRUMS%20(FULL%20KITS)/DRUM%20MACHINES/Roland%20TD%207/62[kb]SPLASH%20TD_2.wav.mp3",
   },
@@ -54,16 +54,16 @@ class DrumPad extends React.Component {
     this.changeStyle = this.changeStyle.bind(this);
     document.addEventListener("keydown", this.handleKeyPress);
   }
-  changeStyle(drum) {
-    let div = document.getElementById(drum.id).parentNode;
+  changeStyle() {
+    let div = document.getElementById(this.props.drum.name);
     div.style.backgroundColor = "#FF1B1C";
     setTimeout(() => {
       div.style.backgroundColor = "gainsboro";
     }, 100);
   }
   playDrum() {
-    let drum = document.getElementById(this.props.drum.name);
-    this.changeStyle(drum);
+    let drum = document.getElementById(this.props.drum.name).firstChild;
+    this.changeStyle();
     drum.currentTime = 0;
     drum.play();
   }
@@ -74,12 +74,8 @@ class DrumPad extends React.Component {
   }
   render() {
     return (
-      // Div should have id
-      //  - Adjust playDrum and changeStyle functions to reflect this change
-      <div className="drum-pad disable-select" onClick={this.playDrum}>
-        <audio id={this.props.drum.name}>
-          <source src={this.props.drum.src} type="audio/mpeg"></source>
-        </audio>
+      <div id={this.props.drum.name} className="drum-pad disable-select" onClick={this.playDrum}>
+        <audio className="clip" id={this.props.drum.hotkey} src={this.props.drum.src}></audio>
         {this.props.drum.hotkey}
       </div>
     );
