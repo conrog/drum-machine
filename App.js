@@ -51,10 +51,19 @@ class DrumPad extends React.Component {
     super(props);
     this.playDrum = this.playDrum.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.changeStyle = this.changeStyle.bind(this);
     document.addEventListener("keydown", this.handleKeyPress);
+  }
+  changeStyle(drum) {
+    let div = document.getElementById(drum.id).parentNode;
+    div.style.backgroundColor = "#FF1B1C";
+    setTimeout(() => {
+      div.style.backgroundColor = "gainsboro";
+    }, 100);
   }
   playDrum() {
     let drum = document.getElementById(this.props.drum.name);
+    this.changeStyle(drum);
     drum.currentTime = 0;
     drum.play();
   }
@@ -65,8 +74,9 @@ class DrumPad extends React.Component {
   }
   render() {
     return (
-      <div onClick={this.playDrum}>
-        <h2>{this.props.drum.name}</h2>
+      // Div should have id
+      //  - Adjust playDrum and changeStyle functions to reflect this change
+      <div className="drum-pad disable-select" onClick={this.playDrum}>
         <audio id={this.props.drum.name}>
           <source src={this.props.drum.src} type="audio/mpeg"></source>
         </audio>
@@ -83,11 +93,13 @@ class App extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div id="drum-machine">
         <h1>Drum Machine React App</h1>
-        {drums.map((drum) => {
-          return <DrumPad key={drum.name} drum={drum} />;
-        })}
+        <div id="display">
+          {drums.map((drum) => {
+            return <DrumPad key={drum.name} drum={drum} />;
+          })}
+        </div>
       </div>
     );
   }
