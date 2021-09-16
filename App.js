@@ -64,6 +64,7 @@ class DrumPad extends React.Component {
   playDrum() {
     let drum = document.getElementById(this.props.drum.name).firstChild;
     this.changeStyle();
+    this.props.display(this.props.drum.name);
     drum.currentTime = 0;
     drum.play();
   }
@@ -86,15 +87,25 @@ class DrumPad extends React.Component {
 class App extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      drumName: "test",
+    };
+    this.displayDrumName = this.displayDrumName.bind(this);
+  }
+  displayDrumName(name) {
+    this.setState({ drumName: name });
   }
   render() {
     return (
       <div id="drum-machine">
-        <h1>Drum Machine React App</h1>
         <div id="display">
-          {drums.map((drum) => {
-            return <DrumPad key={drum.name} drum={drum} />;
-          })}
+          <h1>Drum Machine</h1>
+          <div className="grid-container">
+            {drums.map((drum) => {
+              return <DrumPad key={drum.name} drum={drum} display={this.displayDrumName} />;
+            })}
+          </div>
+          <div id="screen">{this.state.drumName}</div>
         </div>
       </div>
     );
