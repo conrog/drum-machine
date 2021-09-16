@@ -66,6 +66,7 @@ class DrumPad extends React.Component {
     this.changeStyle();
     this.props.display(this.props.drum.name);
     drum.currentTime = 0;
+    drum.volume = 0.2;
     drum.play();
   }
   handleKeyPress(event) {
